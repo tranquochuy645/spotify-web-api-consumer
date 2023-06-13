@@ -172,30 +172,49 @@ export default class SpotifyController {
     }
   };
 
-  // public play = (url: string)=>{
-
-  // }
-  public resume = () => {
+  public play = (uri: string ,deviceId?:string|null)=>{
     if (this.accessToken) {
-      const url = SpotifyController.PLAY;
+      let url = SpotifyController.PLAY;
+      if(deviceId){
+        url+="?device_id="+deviceId;
+      }
+      const method = 'PUT';
+      const body = {uris:[uri]};
+      this.callSpotifyApi(method, url, JSON.stringify(body));
+    } else {
+      console.error('Access token not available');
+    }
+  }
+  public resume = (deviceId?:string|null) => {
+    if (this.accessToken) {
+      let url = SpotifyController.PLAY;
+      if(deviceId){
+        url+="?device_id="+deviceId;
+      }
       const method = 'PUT';
       this.callSpotifyApi(method, url, '');
     } else {
       console.error('Access token not available');
     }
   }
-  public pause = () => {
+  public pause = (deviceId?:string|null) => {
     if (this.accessToken) {
-      const url = SpotifyController.PAUSE;
+      let url = SpotifyController.PAUSE;
+      if(deviceId){
+        url+="?device_id="+deviceId;
+      }
       const method = 'PUT';
       this.callSpotifyApi(method, url, '');
     } else {
       console.error('Access token not available');
     }
   }
-  public next = () => {
+  public next = (deviceId?:string|null) => {
     if (this.accessToken) {
-      const url = SpotifyController.NEXT;
+      let url = SpotifyController.NEXT;
+      if(deviceId){
+        url+="?device_id="+deviceId;
+      }
       const method = 'POST';
       this.callSpotifyApi(method, url, '');
     } else {
@@ -203,9 +222,12 @@ export default class SpotifyController {
     }
   }
 
-  public previous = () => {
+  public previous = (deviceId?:string|null) => {
     if (this.accessToken) {
-      const url = SpotifyController.PREVIOUS;
+      let url = SpotifyController.PREVIOUS;
+      if(deviceId){
+        url+="?device_id="+deviceId;
+      }
       const method = 'POST';
       this.callSpotifyApi(method, url, '');
     } else {

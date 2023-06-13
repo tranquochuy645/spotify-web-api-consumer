@@ -13,9 +13,10 @@ function App() {
   const [controller, setController] = useState<SpotifyController | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Array<[string, string, string]> | null>(null)
-  const [selectedResult, setSelectedResult] = useState<string | null>(null);
   const [devices, setDevices] = useState<Array<any> | null>([]);
+  const [selectedDevice, setSelectedDevice] = useState<string |null>(null);
   const [currentSong, setCurrentSong] = useState<{ name: string, uri: string, imageUrl: string, artists: Array<string> } | null>(null);
+
   const getCode = () => {
     // this function get the auth code from url bar
     let queryString = window.location.search;
@@ -81,12 +82,11 @@ function App() {
   }
   const handleSearchResults = (results: Array<[string, string, string]> | null, err?: any) => {
     setSearchResults(results)
-    console.log(results);
     if (err) {
       console.error(err)
     }
   }
-  console.log(selectedResult);
+
   const checkDevices = () => {
     controller?.getDevices(
       (devices: Array<any> | null, err?: any) => {
@@ -137,6 +137,7 @@ function App() {
     handleSearch();
   }, [searchQuery]);
 
+
   return (
     <>
       <section id="left-aside">
@@ -150,7 +151,8 @@ function App() {
               Logout
             </button>
         }
-        <select>
+        <h2>Select a device</h2>
+        <select onChange={(e)=>{setSelectedDevice(e.target.value)}}>
           {devices?.map((device) => (
             <option key={device.id} value={device.id}>
               {device.name}
@@ -174,7 +176,7 @@ function App() {
                 className="search-result-li"
                 key={uri}
                 value={uri}
-                onClick={() => setSelectedResult(uri)}
+                onClick={()=>controller?.play(uri,selectedDevice)}
               > <img className='search-result-img'
                 src={imageUrl} />
                 <span>&nbsp;&nbsp;{name}</span>
@@ -186,17 +188,17 @@ function App() {
       </section>
       <section id='playback-controller'>
         <div id="playback-btn-container">
-          <button onClick={controller?.resume}>
+          <button onClick={()=>controller?.resume(selectedDevice)}>
             <span role="img" aria-label="Resume">&#9658;</span>
           </button>
-          <button onClick={controller?.pause}>
+          <button onClick={()=>controller?.pause(selectedDevice)}>
             <span role="img" aria-label="Pause">&#10074;&#10074;</span>
           </button>
-          <button onClick={controller?.next}>
-            <span role="img" aria-label="Next">&#9654;&#9654;</span>
+          <button onClick={()=>controller?.next(selectedDevice)}>
+            <span role="img" aria-label="Next">&#9664;&#9664;</span>
           </button>
-          <button onClick={controller?.previous}>
-            <span role="img" aria-label="Previous">&#9664;&#9664;</span>
+          <button onClick={()=>controller?.previous(selectedDevice)}>
+            <span role="img" aria-label="Previous">&#9654;&#9654;</span>
           </button>
         </div>
         {currentSong && (
