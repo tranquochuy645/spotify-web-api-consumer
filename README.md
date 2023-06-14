@@ -15,7 +15,7 @@ To run this project, you need to have the following:
 
 Installation
 ------------
-The module ["SpotifyController_PKCE"].(https://github.com/tranquochuy645/spotify-web-api-consumer/blob/main/src/SpotifyController_PKCE.ts) in "src/SpotifyController_PKCE.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside the client-side application  
+The module ["SpotifyController_PKCE"](https://github.com/tranquochuy645/spotify-web-api-consumer/blob/main/src/SpotifyController_PKCE.ts) in "src/SpotifyController_PKCE.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside the client-side application  
 
 Or you can install the full project following these instructions below
 
