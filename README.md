@@ -2,7 +2,7 @@ Spotify Web API Integration
 ===========================
 
 A full-stack React application that integrates with the Spotify Web API
-to provide some of their commonly used features
+to provide a range of popular functionalities
 
 Prerequisites
 -------------
@@ -15,7 +15,7 @@ To run this project, you need to have the following:
 
 Installation
 ------------
-The module SpotifyController_PKCE in src/SpotifyController_PKCE.ts can be reused as a standalone module which can handle the Authoriztion code with PKCE and some other itergration with Spotify API inside the client-side application  
+The module "SpotifyController_PKCE" in "src/SpotifyController_PKCE.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside the client-side application  
 
 Or you can install the full project following these instructions below
 
