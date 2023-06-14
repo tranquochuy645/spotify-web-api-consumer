@@ -89,14 +89,3 @@ overview of their differences:
 
 Refer to the project documentation for more detailed information on
 implementing these authorization methods.
-
-Contributing
-------------
-
-Contributions are welcome! If you encounter any issues or have
-suggestions for improvements, feel free to submit a pull request.
-
-License
--------
-
-This project is licensed under the [MIT License](LICENSE).
