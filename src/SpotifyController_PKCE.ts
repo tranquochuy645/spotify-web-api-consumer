@@ -1,19 +1,20 @@
 export default class SpotifyController_PKCE {
 
-
     // Spotify API endpoints
     private static readonly TOKEN = "https://accounts.spotify.com/api/token";
-    // private static readonly PLAYLISTS: string = "https://api.spotify.com/v1/me/playlists";
     private static readonly DEVICES: string = "https://api.spotify.com/v1/me/player/devices";
     private static readonly PLAY: string = "https://api.spotify.com/v1/me/player/play";
     private static readonly PAUSE: string = "https://api.spotify.com/v1/me/player/pause";
     private static readonly NEXT: string = "https://api.spotify.com/v1/me/player/next";
     private static readonly PREVIOUS: string = "https://api.spotify.com/v1/me/player/previous";
+    private static readonly CURRENTLYPLAYING: string = "https://api.spotify.com/v1/me/player/currently-playing";
+    private static readonly SEARCH: string = "https://api.spotify.com/v1/search";
+    // some other endpoints I haven't used yet
+    // private static readonly PLAYLISTS: string = "https://api.spotify.com/v1/me/playlists";
     // private static readonly PLAYER: string = "https://api.spotify.com/v1/me/player";
     // private static readonly TRACKS: string = "https://api.spotify.com/v1/playlists/{{PlaylistId}}/tracks";
-    private static readonly CURRENTLYPLAYING: string = "https://api.spotify.com/v1/me/player/currently-playing";
     // private static readonly SHUFFLE: string = "https://api.spotify.com/v1/me/player/shuffle";
-    private static readonly SEARCH: string = "https://api.spotify.com/v1/search";
+   
     private access_token: string;
     private refresh_token: string;
     private expire_time: number;
@@ -35,7 +36,6 @@ export default class SpotifyController_PKCE {
         this.code_verifier = code_verifier;
         this.expire_time = 3600; // default expiration time of spotify api
         this.refreshTimeout = undefined;
-
         //try to get from sessionStorage
         this.access_token = sessionStorage.getItem("access_token") || "";
         this.refresh_token = sessionStorage.getItem("refresh_token") || "";
@@ -78,7 +78,7 @@ export default class SpotifyController_PKCE {
         }
     }
 
-    private requestAuthorization: () => Promise<void> = async () => {
+    private requestAuthorization: () => Promise<Error | undefined> = async () => {
         let body = "grant_type=authorization_code";
         body += "&code=" + this.auth_code;
         body += "&redirect_uri=" + this.redirect_uri;
@@ -107,12 +107,12 @@ export default class SpotifyController_PKCE {
                 this.refreshAccessToken();
             }, this.expire_time * 1000);
         } else {
-            throw new Error('Authorization request failed');
+            return new Error('Authorization request failed');
         }
     }
 
 
-    private refreshAccessToken: () => Promise<void> = async () => {
+    private refreshAccessToken: () => Promise<Error | undefined> = async () => {
         let body = "grant_type=refresh_token";
         body += "&refresh_token=" + this.access_token;
         body += "&client_id=" + this.client_id;
@@ -137,7 +137,7 @@ export default class SpotifyController_PKCE {
                 this.refreshAccessToken();
             }, this.expire_time * 1000);
         } else {
-            throw new Error("Refresh request failed");
+            return new Error("Refresh request failed");
         }
     }
 

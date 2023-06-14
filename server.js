@@ -9,8 +9,8 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const client_id = process.env.SPOTIFY_CLIENT_ID; // this is stored on the client-side too 
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // this is only stored on the server
+const client_id = process.env.SPOTIFY_CLIENT_ID;
 const port = process.env.PORT || 3000;
 
 // All the calls to Spotify web API will be made by the client side app directly
@@ -105,12 +105,7 @@ app.get(
         )
     }
 )
-app.get(
-    '/clientid',
-    (req, res) => {
-        res.json({ client_id: process.env.SPOTIFY_CLIENT_ID });
-    }
-)
+
 // Serve static assets (e.g., CSS, JavaScript)
 app.use(express.static('dist'));
 

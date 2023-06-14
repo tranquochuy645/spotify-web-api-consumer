@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import './App.css'
+import PlaybackSDK from './PlaybackSDK';
 import SpotifyController from './SpotifyController';
 import SpotifyController_PKCE from './SpotifyController_PKCE';
-
-
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 
 const redirect_uri = window.location.origin;
@@ -13,7 +11,6 @@ function App() {
   // https://developer.spotify.com/dashboard
   // client id can be hardcoded in the client-side app like this
   const clientId = "84d53fd1231f4dc29b0ead913a741764";
-
   // client secret must be stored safely somewhere else
   // which will require a server or a third party service like AWS lambda to perform Authorization step
 
@@ -88,42 +85,38 @@ function App() {
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
   const [currentSong, setCurrentSong] = useState<{ name: string, uri: string, imageUrl: string, artists: Array<string> } | null>(null);
 
-  useEffect(() => {
-    // this block executes once
-    getCode();
-  }, [])
+
   const getCode = () => {
     // this function get the auth code from url bar
     let queryString = window.location.search;
+    const code_verifier = sessionStorage.getItem("code_verifier") || "";
+    let code = "";
     if (queryString.length > 0) {
       // if there is query string
-      let urlParams = new URLSearchParams(queryString);
-      let code = urlParams.get('code');
-      if (code && redirect_uri) {
-        const code_verifier = sessionStorage.getItem("code_verifier") || "";
-        if (code_verifier != "") {
-          setController(
-            new SpotifyController_PKCE
-              (
-                code,
-                redirect_uri,
-                clientId,
-                code_verifier,
-                checkLoginState
-              )
-          );
-        } else {
-          setController(new SpotifyController(code, redirect_uri, checkLoginState));
-        }
-      }
+      const urlParams = new URLSearchParams(queryString);
+      code = urlParams.get('code') || "";
       window.history.pushState("", "", window.location.origin); // remove query string
+    }
+    if (code_verifier) {
+      setController(
+        new SpotifyController_PKCE
+          (
+            code,
+            redirect_uri,
+            clientId,
+            code_verifier,
+            checkLoginState
+          )
+      );
     } else {
-      setController(new SpotifyController("", redirect_uri, checkLoginState)); // initialize without auth code
+      setController(new SpotifyController(code, redirect_uri, checkLoginState));
     }
   }
-  const checkLoginState = (err?: any) => {
+  const checkLoginState = (err: Error | undefined) => {
     if (err) {
+      setController(null);
       setIsLoggedIn(false);
+      sessionStorage.clear();
       console.error(err);
     } else {
       setIsLoggedIn(true);
@@ -173,7 +166,7 @@ function App() {
 
   let itv: number;
   useEffect(() => {
-    if (controller) {
+    if (isLoggedIn&&controller) {
       clearInterval(itv);
       itv = setInterval(
         () => {
@@ -188,13 +181,18 @@ function App() {
       clearInterval(itv);
     };
   }
-    , [controller]);
+    , [isLoggedIn]);
 
   useEffect(() => {
     handleSearch();
   }, [searchQuery]);
 
 
+
+  useEffect(() => {
+    // this block executes once
+    getCode();
+  }, [])
   return (
     <>
       <section id="left-aside">
@@ -271,6 +269,7 @@ function App() {
           </div>
         )}
       </section>
+      {controller&&isLoggedIn ? <PlaybackSDK /> : null}
     </>
   );
 

@@ -1,17 +1,20 @@
 export default class SpotifyController {
 
   // Spotify API endpoints
-  // private static readonly PLAYLISTS: string = "https://api.spotify.com/v1/me/playlists";
   private static readonly DEVICES: string = "https://api.spotify.com/v1/me/player/devices";
   private static readonly PLAY: string = "https://api.spotify.com/v1/me/player/play";
   private static readonly PAUSE: string = "https://api.spotify.com/v1/me/player/pause";
   private static readonly NEXT: string = "https://api.spotify.com/v1/me/player/next";
   private static readonly PREVIOUS: string = "https://api.spotify.com/v1/me/player/previous";
+  private static readonly CURRENTLYPLAYING: string = "https://api.spotify.com/v1/me/player/currently-playing";
+  private static readonly SEARCH: string = "https://api.spotify.com/v1/search";
+  // some other endpoints I haven't used yet
+  // private static readonly PLAYLISTS: string = "https://api.spotify.com/v1/me/playlists";
   // private static readonly PLAYER: string = "https://api.spotify.com/v1/me/player";
   // private static readonly TRACKS: string = "https://api.spotify.com/v1/playlists/{{PlaylistId}}/tracks";
-  private static readonly CURRENTLYPLAYING: string = "https://api.spotify.com/v1/me/player/currently-playing";
-  // private static readonly SHUFFLE: string = "https://api.spotify.com/v1/me/player/shuffle";
-  private static readonly SEARCH: string = "https://api.spotify.com/v1/search";
+  // private static readonly SHUFFLE: string = "https://api.spotify.com/v1/me/player/shuffle";    
+  // private static readonly TOKEN = "https://accounts.spotify.com/api/token";
+
   private access_token: string;
   private refresh_token: string;
   private expire_time: number;
@@ -22,7 +25,7 @@ export default class SpotifyController {
   constructor(
     auth_code: string,
     redirect_uri: string,
-    callback?: (err?: any) => void, 
+    callback?: (err?: any) => void,
   ) {
     this.auth_code = auth_code;
     this.redirect_uri = redirect_uri;
@@ -34,18 +37,18 @@ export default class SpotifyController {
     this.refresh_token = sessionStorage.getItem("refresh_token") || "";
     if (this.redirect_uri) {
       if (this.auth_code) {
-          this.requestAuthorization() // authorize with given athCode
-            .then(
-              (err: any) => {
-                if (callback) {
-                  if (err) {
-                    callback(err);
-                  } else {
-                    callback();
-                  }
+        this.requestAuthorization() // authorize with given athCode
+          .then(
+            (err: any) => {
+              if (callback) {
+                if (err) {
+                  callback(err);
+                } else {
+                  callback();
                 }
               }
-            )
+            }
+          )
       } else {
         //if no auth_code provided, try to use tokens from session storage
         if (this.access_token && this.refresh_token) {
@@ -71,7 +74,7 @@ export default class SpotifyController {
     }
   }
 
-  private requestAuthorization: () => Promise<void> = async () => {
+  private requestAuthorization: () => Promise<Error | undefined> = async () => {
     // this mode requires the server running to serve /auth endpoint
     const response = await fetch('/auth', {
       headers: {
@@ -93,12 +96,12 @@ export default class SpotifyController {
         this.refreshAccessToken();
       }, this.expire_time * 1000);
     } else {
-      throw new Error('Authorization request failed');
+      return new Error('Authorization request failed');
     }
   }
- 
 
-  private refreshAccessToken: () => Promise<void> = async () => {
+
+  private refreshAccessToken: () => Promise<Error | undefined> = async () => {
     const response = await fetch('/refresh', {
       headers: {
         "refresh_token": this.refresh_token
@@ -116,7 +119,7 @@ export default class SpotifyController {
         this.refreshAccessToken();
       }, this.expire_time * 1000);
     } else {
-      throw new Error("Refresh request failed");
+      return new Error("Refresh request failed");
     }
   }
 
