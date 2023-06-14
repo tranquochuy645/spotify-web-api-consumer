@@ -1,6 +1,5 @@
 export default class SpotifyController {
-  public authCode: string;
-  public redirect_uri: string;
+
   // Spotify API endpoints
   // private static readonly PLAYLISTS: string = "https://api.spotify.com/v1/me/playlists";
   private static readonly DEVICES: string = "https://api.spotify.com/v1/me/player/devices";
@@ -13,40 +12,43 @@ export default class SpotifyController {
   private static readonly CURRENTLYPLAYING: string = "https://api.spotify.com/v1/me/player/currently-playing";
   // private static readonly SHUFFLE: string = "https://api.spotify.com/v1/me/player/shuffle";
   private static readonly SEARCH: string = "https://api.spotify.com/v1/search";
-  private accessToken: string;
-  private refreshToken: string;
-  private expireTime: number;
+  private access_token: string;
+  private refresh_token: string;
+  private expire_time: number;
   private refreshTimeout: number | undefined;
+  public auth_code: string;
+  public redirect_uri: string;
+
   constructor(
-    authCode: string,
+    auth_code: string,
     redirect_uri: string,
-    callback?: (err?: any) => void
+    callback?: (err?: any) => void, 
   ) {
-    this.authCode = authCode;
+    this.auth_code = auth_code;
     this.redirect_uri = redirect_uri;
-    this.expireTime = 3600; // default expiration time of spotify api
+    this.expire_time = 3600; // default expiration time of spotify api
     this.refreshTimeout = undefined;
 
     //try to get from sessionStorage
-    this.accessToken = sessionStorage.getItem("accessToken") || "";
-    this.refreshToken = sessionStorage.getItem("refreshToken") || "";
+    this.access_token = sessionStorage.getItem("access_token") || "";
+    this.refresh_token = sessionStorage.getItem("refresh_token") || "";
     if (this.redirect_uri) {
-      if (this.authCode) {
-        this.requestAuthorization() // authorize with given athCode
-          .then(
-            (err: any) => {
-              if (callback) {
-                if (err) {
-                  callback(err);
-                } else {
-                  callback();
+      if (this.auth_code) {
+          this.requestAuthorization() // authorize with given athCode
+            .then(
+              (err: any) => {
+                if (callback) {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    callback();
+                  }
                 }
               }
-            }
-          )
+            )
       } else {
-        //if no authCode provided, try to use tokens from session storage
-        if (this.accessToken && this.refreshToken) {
+        //if no auth_code provided, try to use tokens from session storage
+        if (this.access_token && this.refresh_token) {
           this.refreshAccessToken()
             // try refresh token to make sure it's not expired and renew the timer 
             .then(
@@ -62,7 +64,6 @@ export default class SpotifyController {
             )
         } else {
           if (callback) {
-            console.log(53);
             callback(new Error("No auth code provided && No token in sessionStorage"));
           }
         }
@@ -71,47 +72,49 @@ export default class SpotifyController {
   }
 
   private requestAuthorization: () => Promise<void> = async () => {
+    // this mode requires the server running to serve /auth endpoint
     const response = await fetch('/auth', {
       headers: {
-        "code": this.authCode,
+        "code": this.auth_code,
         "redirect_uri": this.redirect_uri
       }
     });
 
     if (response.ok) {
       const data = await response.json();
-      this.accessToken = data.access_token ? data.access_token : this.accessToken;
-      this.refreshToken = data.refresh_token ? data.refresh_token : this.refreshToken;
-      this.expireTime = data.expires_in ? data.expires_in : this.expireTime;
-      sessionStorage.setItem("accessToken", this.accessToken);
-      sessionStorage.setItem("refreshToken", this.refreshToken);
+      this.access_token = data.access_token ? data.access_token : this.access_token;
+      this.refresh_token = data.refresh_token ? data.refresh_token : this.refresh_token;
+      this.expire_time = data.expires_in ? data.expires_in : this.expire_time;
+      sessionStorage.setItem("access_token", this.access_token);
+      sessionStorage.setItem("refresh_token", this.refresh_token);
 
       clearTimeout(this.refreshTimeout);
       this.refreshTimeout = setTimeout(() => {
         this.refreshAccessToken();
-      }, this.expireTime * 1000);
+      }, this.expire_time * 1000);
     } else {
       throw new Error('Authorization request failed');
     }
   }
+ 
 
   private refreshAccessToken: () => Promise<void> = async () => {
     const response = await fetch('/refresh', {
       headers: {
-        "refresh_token": this.refreshToken
+        "refresh_token": this.refresh_token
       }
     });
     if (response.ok) {
       const data = await response.json();
-      this.accessToken = data.access_token ? data.access_token : this.accessToken;
-      this.refreshToken = data.refresh_token ? data.refresh_token : this.refreshToken;
-      this.expireTime = data.expires_in ? data.expires_in : this.expireTime;
-      sessionStorage.setItem("accessToken", this.accessToken);
-      sessionStorage.setItem("refreshToken", this.refreshToken);
+      this.access_token = data.access_token ? data.access_token : this.access_token;
+      this.refresh_token = data.refresh_token ? data.refresh_token : this.refresh_token;
+      this.expire_time = data.expires_in ? data.expires_in : this.expire_time;
+      sessionStorage.setItem("access_token", this.access_token);
+      sessionStorage.setItem("refresh_token", this.refresh_token);
       clearTimeout(this.refreshTimeout);
       this.refreshTimeout = setTimeout(() => {
         this.refreshAccessToken();
-      }, this.expireTime * 1000);
+      }, this.expire_time * 1000);
     } else {
       throw new Error("Refresh request failed");
     }
@@ -129,7 +132,7 @@ export default class SpotifyController {
         method: method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.accessToken
+          'Authorization': 'Bearer ' + this.access_token
         },
         ...(body != '' && { body })
       }
@@ -147,7 +150,7 @@ export default class SpotifyController {
       )
   }
   public getDevices = (callback: (devices: Array<any>, err?: any) => void) => {
-    if (this.accessToken) {
+    if (this.access_token) {
       const method = 'GET';
       this.callSpotifyApi(method, SpotifyController.DEVICES, '', (response) => {
         if (response.ok) {
@@ -172,24 +175,24 @@ export default class SpotifyController {
     }
   };
 
-  public play = (uri: string ,deviceId?:string|null)=>{
-    if (this.accessToken) {
+  public play = (uri: string, deviceId?: string | null) => {
+    if (this.access_token) {
       let url = SpotifyController.PLAY;
-      if(deviceId){
-        url+="?device_id="+deviceId;
+      if (deviceId) {
+        url += "?device_id=" + deviceId;
       }
       const method = 'PUT';
-      const body = {uris:[uri]};
+      const body = { uris: [uri] };
       this.callSpotifyApi(method, url, JSON.stringify(body));
     } else {
       console.error('Access token not available');
     }
   }
-  public resume = (deviceId?:string|null) => {
-    if (this.accessToken) {
+  public resume = (deviceId?: string | null) => {
+    if (this.access_token) {
       let url = SpotifyController.PLAY;
-      if(deviceId){
-        url+="?device_id="+deviceId;
+      if (deviceId) {
+        url += "?device_id=" + deviceId;
       }
       const method = 'PUT';
       this.callSpotifyApi(method, url, '');
@@ -197,11 +200,11 @@ export default class SpotifyController {
       console.error('Access token not available');
     }
   }
-  public pause = (deviceId?:string|null) => {
-    if (this.accessToken) {
+  public pause = (deviceId?: string | null) => {
+    if (this.access_token) {
       let url = SpotifyController.PAUSE;
-      if(deviceId){
-        url+="?device_id="+deviceId;
+      if (deviceId) {
+        url += "?device_id=" + deviceId;
       }
       const method = 'PUT';
       this.callSpotifyApi(method, url, '');
@@ -209,11 +212,11 @@ export default class SpotifyController {
       console.error('Access token not available');
     }
   }
-  public next = (deviceId?:string|null) => {
-    if (this.accessToken) {
+  public next = (deviceId?: string | null) => {
+    if (this.access_token) {
       let url = SpotifyController.NEXT;
-      if(deviceId){
-        url+="?device_id="+deviceId;
+      if (deviceId) {
+        url += "?device_id=" + deviceId;
       }
       const method = 'POST';
       this.callSpotifyApi(method, url, '');
@@ -222,11 +225,11 @@ export default class SpotifyController {
     }
   }
 
-  public previous = (deviceId?:string|null) => {
-    if (this.accessToken) {
+  public previous = (deviceId?: string | null) => {
+    if (this.access_token) {
       let url = SpotifyController.PREVIOUS;
-      if(deviceId){
-        url+="?device_id="+deviceId;
+      if (deviceId) {
+        url += "?device_id=" + deviceId;
       }
       const method = 'POST';
       this.callSpotifyApi(method, url, '');
@@ -235,10 +238,11 @@ export default class SpotifyController {
     }
   }
   public search = (
+    // this only search for tracks
     searchQuery: string,
     callback: (results: Array<[string, string, string]>, err?: any) => void
   ) => {
-    if (this.accessToken) {
+    if (this.access_token) {
       const url = `${SpotifyController.SEARCH}?q=${searchQuery}&type=track&limit=50`;
       const method = 'GET';
 
@@ -261,8 +265,8 @@ export default class SpotifyController {
     }
   };
 
-  public getCurrentSong = (callback: (song:{name:string,uri:string,imageUrl:string,artists:Array<string>} | null, err?: any) => void) => {
-    if (this.accessToken) {
+  public getCurrentSong = (callback: (song: { name: string, uri: string, imageUrl: string, artists: Array<string> } | null, err?: any) => void) => {
+    if (this.access_token) {
       const method = "GET";
       this.callSpotifyApi(method, SpotifyController.CURRENTLYPLAYING, "", (response) => {
         if (response.ok) {
