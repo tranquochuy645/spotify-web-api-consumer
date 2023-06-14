@@ -70,6 +70,11 @@ directory:
 
     npm b-start
 
+Or just start:
+    
+    npm start
+    
+
 Authorization Methods
 ---------------------
 
