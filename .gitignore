@@ -26,3 +26,4 @@ dist-ssr
 *.env
 src/clientId.ts
 README.html
+README.md
