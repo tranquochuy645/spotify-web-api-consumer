@@ -3,7 +3,7 @@ import PlaybackSDK from './PlaybackSDK';
 import SpotifyController from './SpotifyController';
 import SpotifyController_PKCE from './SpotifyController_PKCE';
 import clientId from './clientId';
-// import your client id from somewhere else or declare it right here
+// import your client id or declare it right here
 // const clientId = "abcdefghijklmnopqrstuvwxyz";
 
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
