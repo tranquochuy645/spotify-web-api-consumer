@@ -2,8 +2,7 @@ Spotify Web API Integration
 ===========================
 
 A full-stack React application that integrates with the Spotify Web API
-to provide various features such as authentication, song search,
-playback control, and displaying the currently playing song.
+to provide some of their commonly used features
 
 Prerequisites
 -------------
@@ -18,24 +17,23 @@ Installation
 
 1.  Clone the repository:
 
-```{=html}
-<!-- -->
 ```
     git clone https://github.com/tranquochuy645/spotify-web-api-consumer
+```
 
 2.  Navigate to the project directory:
 
-```{=html}
-<!-- -->
+
 ```
     cd spotify-web-api-consumer
-
+```
 3.  Install the dependencies:
 
-```{=html}
-<!-- -->
+
+
 ```
     npm install
+```
 
 Spotify Developer Account Setup
 -------------------------------
@@ -58,22 +56,25 @@ following configuration variables:
 Replace `YOUR_SPOTIFY_CLIENT_ID` and `YOUR_SPOTIFY_CLIENT_SECRET` with
 your actual Spotify client ID and client secret obtained from your
 Spotify Developer account. Replace `YOUR_SERVER_PORT` with the desired
-port number for your local server (e.g., 3000).
+port number for your local server (e.g., 3000).  
+
+Replace the constant clientId in src/App.tsx with your client id or make a config file to import it from
+![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/62705616-9f77-4fd3-87bd-5b8df1576f6e)
+
 
 Usage
 -----
 
-To run the application, execute the following command in the project
+To build and run the application, execute the following command in the project
 directory:
 
-    npm start
+    npm b-start
 
 Authorization Methods
 ---------------------
 
 This project provides two authorization methods: PKCE (Proof Key for
-Code Exchange) and the traditional authorization flow. Here\'s a brief
-overview of their differences:
+Code Exchange) and the traditional authorization flow:
 
 -   PKCE Authorization Flow: This flow is designed for client-side
     applications and enhances security by using a code challenge and
@@ -87,5 +88,5 @@ overview of their differences:
     Guide](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow)
     for more information.
 
-Refer to the project documentation for more detailed information on
-implementing these authorization methods.
+### Result
+![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/22f9fec6-9fa4-44f4-b485-751fff9cd813)
