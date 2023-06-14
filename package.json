@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "tsc && vite build && node server.js"
+    "b-start": "tsc && vite build && node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "@types/spotify-web-playback-sdk": "^0.1.15",

@@ -2,18 +2,15 @@ import { useEffect, useState } from 'react'
 import PlaybackSDK from './PlaybackSDK';
 import SpotifyController from './SpotifyController';
 import SpotifyController_PKCE from './SpotifyController_PKCE';
+import clientId from './clientId';
+// import your client id from somewhere else or declare it right here
+// const clientId = "abcdefghijklmnopqrstuvwxyz";
+
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 
 const redirect_uri = window.location.origin;
 
 function App() {
-  // this is my client id, go get yourself one here:
-  // https://developer.spotify.com/dashboard
-  // client id can be hardcoded in the client-side app like this
-  const clientId = "84d53fd1231f4dc29b0ead913a741764";
-  // client secret must be stored safely somewhere else
-  // which will require a server or a third party service like AWS lambda to perform Authorization step
-
 
   // An alternative is Authorization code PKCE flow which doesn't require client secret can be implemented without a server
   // Their documentation: https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
