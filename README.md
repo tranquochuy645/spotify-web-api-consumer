@@ -74,7 +74,7 @@ directory:
 
     npm b-start
 
-Or just start:
+Or just run it:
     
     npm start
     
