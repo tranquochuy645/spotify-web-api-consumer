@@ -12,9 +12,12 @@ To run this project, you need to have the following:
 -   Node.js installed on your machine.
 -   A Premium Spotify account.
 
+
 Installation
 ------------
+The module SpotifyController_PKCE in src/SpotifyController_PKCE.ts can be reused as a standalone module which can handle the Authoriztion code with PKCE and some other itergration with Spotify API inside the client-side application  
 
+Or you can install the full project following these instructions below
 
 1.  Clone the repository:
 
