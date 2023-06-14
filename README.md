@@ -7,10 +7,7 @@ to provide a range of popular functionalities
 Prerequisites
 -------------
 
-To run this project, you need to have the following:
-
--   Node.js installed on your machine.
--   A Premium Spotify account.
+To run this project, you need to have a premium Spotify account
 
 
 Installation
