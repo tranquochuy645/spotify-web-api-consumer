@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import PlaybackSDK from './PlaybackSDK';
 import SpotifyController from './SpotifyController';
 import SpotifyController_PKCE from './SpotifyController_PKCE';
-import clientId from './clientId';
+// import clientId from './clientId';
 // import your client id or declare it right here
-// const clientId = "abcdefghijklmnopqrstuvwxyz";
+const clientId = "84d53fd1231f4dc29b0ead913a741764";
 
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 
