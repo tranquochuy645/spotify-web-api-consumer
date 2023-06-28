@@ -23,8 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-*.env
+.env
 *.sh
-src/clientId.ts
-README.html
+
+src/config.ts
+
+README.md
 

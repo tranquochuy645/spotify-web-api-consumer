@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import PlaybackSDK from './PlaybackSDK';
-import SpotifyController from './SpotifyController';
-import SpotifyController_PKCE from './SpotifyController_PKCE';
-// import clientId from './clientId';
-// import your client id or declare it right here
-const clientId = "abcdefghijklmnopqrstuvwxyz";
+import PlaybackSDK from '../lib/webPlaybackSDK';
+import SpotifyController_PKCE from '../lib/spotifyController';
+import { conf } from '../config';
+
+const clientId = conf.clientId;
 
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 
@@ -12,20 +11,8 @@ const redirect_uri = window.location.origin;
 
 function App() {
 
-  // An alternative is Authorization code PKCE flow which doesn't require client secret can be implemented without a server
+  // Authorization code PKCE flow which doesn't require client secret can be implemented without a server
   // Their documentation: https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
-
-  // traditional Authorization code flow  ( require a server, example code in server.js) //
-  const handleLogin = () => {
-    let url = AUTHORIZE;
-    url += "?client_id=" + clientId;
-    url += "&response_type=code";
-    url += "&redirect_uri=" + encodeURI(redirect_uri);
-    url += "&show_dialog=true";
-    url += "&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
-    window.location.href = url; // redirect user to Spotify login page
-  };
-  // traditional Authorization code flow //
 
   // Authorization code PKCE flow //
   const generateRandomString = (length: number) => {
@@ -75,7 +62,7 @@ function App() {
 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [controller, setController] = useState<SpotifyController | SpotifyController_PKCE | null>(null);
+  const [controller, setController] = useState< SpotifyController_PKCE | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Array<[string, string, string]> | null>(null)
   const [devices, setDevices] = useState<Array<any> | null>([]);
@@ -105,9 +92,7 @@ function App() {
             checkLoginState
           )
       );
-    } else {
-      setController(new SpotifyController(code, redirect_uri, checkLoginState));
-    }
+    } 
   }
   const checkLoginState = (err: Error | undefined) => {
     if (err) {
@@ -161,7 +146,7 @@ function App() {
   }
 
 
-  let itv: number;
+  let itv:any;
   useEffect(() => {
     if (isLoggedIn&&controller) {
       clearInterval(itv);
@@ -196,9 +181,6 @@ function App() {
         {
           !isLoggedIn ?
             <>
-              <button onClick={handleLogin}>
-                Login
-              </button>
               <button onClick={handleLoginPKCE}>
                 Login PKCE
               </button>

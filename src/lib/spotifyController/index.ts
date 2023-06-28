@@ -18,11 +18,11 @@ export default class SpotifyController_PKCE {
     private access_token: string;
     private refresh_token: string;
     private expire_time: number;
-    private refreshTimeout: number | undefined;
+    private refreshTimeout: any;
     private client_id: string;
-    public auth_code: string;
-    public redirect_uri: string;
-    public code_verifier: string;
+    private auth_code: string;
+    private redirect_uri: string;
+    private code_verifier: string;
     constructor(
         auth_code: string,
         redirect_uri: string,
