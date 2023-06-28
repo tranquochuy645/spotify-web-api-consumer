@@ -1,9 +1,9 @@
 Spotify Web API Integration
 ===========================
 
-A full-stack React application that integrates with the Spotify Web API
+A pure client-side React application that integrates with the Spotify Web API
 to provide a range of popular functionalities
-
+This app use Authorization code PKCE flow provided by Spotify service which does not require a server or the risk of exposing your client secret key on the client app to handle the authorization step 
 Prerequisites
 -------------
 
