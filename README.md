@@ -62,7 +62,8 @@ Usage
 Run the project in dev mode:
 
     npm run dev
-   
-### Result
+
+Result
+-----
 ![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/4fb4b9ff-c703-45b8-91eb-36366b045472)
 
