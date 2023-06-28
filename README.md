@@ -2,8 +2,10 @@ Spotify Web API Integration
 ===========================
 
 A pure client-side React application that integrates with the Spotify Web API
-to provide a range of popular functionalities
-This app use Authorization code PKCE flow provided by Spotify service which does not require a server or the risk of exposing your client secret key on the client app to handle the authorization step 
+to provide a range of popular functionalities  
+
+This app use Authorization code PKCE flow which is designed for client-side applications and enhances security by using a code challenge and verifier. It mitigates the risks associated with storing client secrets on the client-side. Learn more about the [PKCE Authorization Flow](https://tools.ietf.org/html/rfc7636).  
+    
 Prerequisites
 -------------
 
@@ -12,7 +14,7 @@ To run this project, you need to have a premium Spotify account
 
 Installation
 ------------
-The module ["SpotifyController_PKCE"](https://github.com/tranquochuy645/spotify-web-api-consumer/blob/main/src/SpotifyController_PKCE.ts) in "src/SpotifyController_PKCE.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside a client-side application  
+The module ["SpotifyController_PKCE"](https://github.com/tranquochuy645/spotify-web-api-consumer/blob/main/src/lib/spotifyController/index.ts) in "src/lib/spotifyController/index.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside a client-side application  
 
 Or you can install the full project following these instructions below
 
@@ -47,52 +49,20 @@ Documentation](https://developer.spotify.com/documentation/web-api).
 Configuration
 -------------
 
-Create a `.env` file in the project root directory and provide the
-following configuration variables:
+Create a `config.ts` file in the `src` directory and export your
+client id:  
 
-    SPOTIFY_CLIENT_ID=YOUR_SPOTIFY_CLIENT_ID
-    SPOTIFY_CLIENT_SECRET=YOUR_SPOTIFY_CLIENT_SECRET
-    PORT=YOUR_SERVER_PORT
+![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/0e839356-1478-43ae-9b8b-b33242e9d24e)  
 
-Replace `YOUR_SPOTIFY_CLIENT_ID` and `YOUR_SPOTIFY_CLIENT_SECRET` with
-your actual Spotify client ID and client secret obtained from your
-Spotify Developer account. Replace `YOUR_SERVER_PORT` with the desired
-port number for your local server (e.g., 3000).  
-
-Replace the constant clientId in src/App.tsx with your client id or make a config file to import it from
-![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/62705616-9f77-4fd3-87bd-5b8df1576f6e)
-
+Replace the string with your actual Spotify client ID obtained from your Spotify Developer account.  
 
 Usage
 -----
 
-To build and run the application, execute the following command in the project
-directory:
+Run the project in dev mode:
 
-    npm b-start
-
-Or just run it:
-    
-    npm start
-    
-
-Authorization Methods
----------------------
-
-This project provides two authorization methods: PKCE (Proof Key for
-Code Exchange) and the traditional authorization flow:
-
--   PKCE Authorization Flow: This flow is designed for client-side
-    applications and enhances security by using a code challenge and
-    verifier. It mitigates the risks associated with storing client
-    secrets on the client-side. Learn more about the [PKCE Authorization
-    Flow](https://tools.ietf.org/html/rfc7636).
--   Traditional Authorization Flow: This flow is commonly used for
-    server-side and native applications. It involves exchanging the
-    authorization code for access and refresh tokens using the client
-    secret. Refer to the [Spotify Web API Authorization
-    Guide](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow)
-    for more information.
-
+    npm run dev
+   
 ### Result
-![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/22f9fec6-9fa4-44f4-b485-751fff9cd813)
+![image](https://github.com/tranquochuy645/spotify-web-api-consumer/assets/119860259/4fb4b9ff-c703-45b8-91eb-36366b045472)
+
