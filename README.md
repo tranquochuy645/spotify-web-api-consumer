@@ -2,19 +2,19 @@ Spotify Web API Integration
 ===========================
 
 A pure client-side React application that integrates with the Spotify Web API
-to provide a range of popular functionalities  
+to provide a range of popular functionalities.  
 
-This app use Authorization code PKCE flow which is designed for client-side applications and enhances security by using a code challenge and verifier. It mitigates the risks associated with storing client secrets on the client-side. Learn more about the [PKCE Authorization Flow](https://tools.ietf.org/html/rfc7636).  
+This app use Authorization code PKCE flow which is designed for client-side applications and enhances security by using a code challenge and verifier. It mitigates the risks associated with storing client secrets on the client-side. Learn more about the [Spotify PKCE Authorization Flow](https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow).  
     
 Prerequisites
 -------------
 
-To run this project, you need to have a premium Spotify account
+To run this project, you need to have a premium Spotify account.
 
 
 Installation
 ------------
-The module ["SpotifyController_PKCE"](https://github.com/tranquochuy645/spotify-web-api-consumer/blob/main/src/lib/spotifyController/index.ts) in "src/lib/spotifyController/index.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside a client-side application  
+The module ["SpotifyController_PKCE"](https://github.com/tranquochuy645/spotify-web-api-consumer/blob/main/src/lib/spotifyController/index.ts) in "src/lib/spotifyController/index.ts" can be reused as a standalone module, which can handle Authorization code PKCE and some other itergration with Spotify API inside a client-side application.  
 
 Or you can install the full project following these instructions below
 
